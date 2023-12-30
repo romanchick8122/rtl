@@ -92,11 +92,35 @@ namespace __detail {
 template<type_list TL>
 using cycle = __detail::cycle<TL, TL>;
 
-template<template<class> class F, type_list TL>
+template<template<class> class F, class TL>
 struct map : nil {};
 template<template<class> class F, type_sequence TL>
 struct map<F, TL> {
     using head = F<typename TL::head>;
     using tail = map<F, typename TL::tail>;
+};
+
+template<type_list TL>
+struct inits {
+    using head = nil;
+    using tail = nil;
+};
+template<type_sequence TL>
+struct inits<TL> {
+    template<type_list TArg>
+    using prepend = cons<typename TL::head, TArg>;
+    using head = nil;
+    using tail = map<prepend, inits<typename TL::tail>>;
+};
+
+template<type_list TL>
+struct tails {
+    using head = nil;
+    using tail = nil;
+};
+template<type_sequence TL>
+struct tails<TL> {
+    using head = TL;
+    using tail = tails<typename TL::tail>;
 };
 }

@@ -125,6 +125,96 @@ static_assert(
     , std::tuple<>
     >
 );
+static_assert(
+    std::same_as
+    < to_std_tuple<map<to_std_tuple, inits<from_pack<int, char, bool, float>>>>
+    , std::tuple
+      < std::tuple<>
+      , std::tuple<int>
+      , std::tuple<int, char>
+      , std::tuple<int, char, bool>
+      , std::tuple<int, char, bool, float>
+      >
+    >
+);
+static_assert(
+    std::same_as
+    < to_std_tuple<map<to_std_tuple, inits<nil>>>
+    , std::tuple<std::tuple<>>
+    >
+);
+static_assert(
+    std::same_as
+    < to_std_tuple<map<to_std_tuple, tails<from_pack<int, char, bool, float>>>>
+    , std::tuple
+      < std::tuple<int, char, bool, float>
+      , std::tuple<char, bool, float>
+      , std::tuple<bool, float>
+      , std::tuple<float>
+      , std::tuple<>
+      >
+    >
+);
+static_assert(
+    std::same_as
+    < to_std_tuple<map<to_std_tuple, tails<nil>>>
+    , std::tuple<std::tuple<>>
+    >
+);
 static_assert(empty<cycle<nil>>);
+template<type_list TL>
+using first3 = to_std_tuple<take<3, TL>>;
+static_assert(
+    std::same_as
+    < first3
+      < map
+        < first3
+        , map
+          < cycle
+          , inits<iterate<make_ptr, int>>
+          >
+        >
+      >
+    , std::tuple
+      < std::tuple<>
+      , std::tuple<int, int, int>
+      , std::tuple<int, int*, int>
+      >
+    >
+);
+static_assert(
+    std::same_as
+    < to_std_tuple
+      < take
+        < 4
+        , map
+          < to_std_tuple
+          , inits<iterate<make_ptr, int>>
+          >
+        >
+      >
+    , std::tuple
+      < std::tuple<>
+      , std::tuple<int>
+      , std::tuple<int, int*>
+      , std::tuple<int, int*, int**>
+      >
+    >
+);
+static_assert(
+    std::same_as
+    < first3
+      < map
+        < first3
+        , tails<iterate<make_ptr, int>>
+        >
+      >
+    , std::tuple
+      < std::tuple<int, int*, int**>
+      , std::tuple<int*, int**, int***>
+      , std::tuple<int**, int***, int****>
+      >
+    >
+);
 int main(int, char**) {
 }
