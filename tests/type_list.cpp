@@ -1,7 +1,10 @@
+#include "util.hpp"
 #include <concepts>
 #include <cstddef>
+#include <cstdint>
 #include <type_list.hpp>
 #include <tuple>
+#include <utility>
 
 using namespace rtl::type_list;
 template<type_list TL>
@@ -214,6 +217,21 @@ static_assert(
       , std::tuple<int*, int**, int***>
       , std::tuple<int**, int***, int****>
       >
+    >
+);
+template<class A, class B>
+using max_by_value = std::conditional_t<(A::value > B::value), A , B>;
+static_assert(
+    std::same_as
+    < to_value_tuple
+      < std::index_sequence
+      , scanl
+        < max_by_value
+        , rtl::value_tag<1>
+        , from_value_tuple<std::index_sequence<1, 1, 2, 1, 4, 2, 8, 4>>
+        >
+      >
+    , std::index_sequence<1, 1, 1, 2, 2, 4, 4, 8, 8>
     >
 );
 int main(int, char**) {

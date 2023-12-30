@@ -1,6 +1,7 @@
 #pragma once
 
 #include <concepts>
+#include "util.hpp"
 namespace rtl::type_list {
 struct nil {};
 template<class TL>
@@ -31,6 +32,11 @@ struct from_tuple;
 template<template<class...> class TTuple, class... TData>
 struct from_tuple<TTuple, TTuple<TData...>> : from_pack<TData...> {};
 
+template<class VT>
+using from_value_tuple = decltype([]<class T, template<class, T...> class VTuple, T... Data>(VTuple<T, Data...>){
+    return from_pack<value_tag<Data>...>{};
+}(std::declval<VT>()));
+
 namespace __detail {
     template<template <class...> class TTuple, type_list, class... TData>
     struct to_tuple {
@@ -43,6 +49,18 @@ namespace __detail {
 }
 template<template <class...> class TTuple, type_list TL>
 using to_tuple = __detail::to_tuple<TTuple, TL>::type;
+
+namespace __detail {
+    template<class...>
+    struct TTuple{};
+};
+template<template <auto...> class TTuple, type_list TL>
+using to_value_tuple = decltype(
+    []<class... TData>(
+        __detail::TTuple<TData...>
+    ) -> TTuple<TData::value...> {
+    }(std::declval<to_tuple<__detail::TTuple, TL>>())
+);
 
 template<class T>
 struct repeat {
@@ -122,5 +140,16 @@ template<type_sequence TL>
 struct tails<TL> {
     using head = TL;
     using tail = tails<typename TL::tail>;
+};
+
+template<template<class, class> class OP, class T, class TL>
+struct scanl {
+    using head = T;
+    using tail = nil;
+};
+template<template<class, class> class OP, class T, type_sequence TL>
+struct scanl<OP, T, TL> {
+    using head = T;
+    using tail = scanl<OP, OP<T, typename TL::head>, typename TL::tail>;
 };
 }
