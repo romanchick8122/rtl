@@ -27,13 +27,19 @@ struct from_pack<TFirst, TRest...> {
     using tail = from_pack<TRest...>;
 };
 
+template<template<class...> class TNew>
+struct tuple_cast_to {
+    template<class TT>
+    using from = decltype(
+        []<template<class...> class TOld, class... TData>(
+            TOld<TData...>
+        ) -> TNew<TData...> {
+        }(std::declval<TT>())
+    );
+};
+
 template<class TT>
-using from_tuple = decltype(
-    []<template<class...> class TTuple, class... TData>(
-        TTuple<TData...>
-    ) -> from_pack<TData...> {
-    }(std::declval<TT>())
-);
+using from_tuple = tuple_cast_to<from_pack>::from<TT>;
 
 template<class VT>
 using from_value_tuple = decltype(
@@ -201,4 +207,37 @@ struct filter<P, TL> {
     using head = __detail::filter_skip<P, TL>::type::head;
     using tail = filter<P, typename __detail::filter_skip<P, TL>::type::tail>;
 };
+
+namespace __detail {
+    template<class T>
+    using flattenl = decltype(
+        []
+        < template<class...> class TupOuter
+        , template<class...> class TupInner
+        , class... TInner
+        , class TOuter
+        >(
+            TupOuter<TupInner<TInner...>, TOuter>
+        ) -> TupOuter<TInner..., TOuter>{
+        }(std::declval<T>())
+    );
+    template<class L, class R>
+    struct zip2 : nil {};
+    template<type_sequence L, type_sequence R>
+    struct zip2<L, R> {
+        using head = __detail::TTuple<typename L::head, typename R::head>;
+        using tail = zip2<typename L::tail, typename R::tail>;
+    };
+    template<class L, class R>
+    using zip_fold_expr = map<flattenl, zip2<L, R>>;
+    template<typename T>
+    using TTupleSingle = TTuple<T>;
+}
+template<class TFirst, class... TRest>
+using zip =
+foldl
+< __detail::zip_fold_expr
+, map<__detail::TTupleSingle, TFirst>
+, from_pack<TRest...>
+>;
 }
