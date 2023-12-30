@@ -65,4 +65,38 @@ template<type_list TL>
 struct drop<0, TL> : TL {};
 template<std::size_t N, type_sequence TL>
 struct drop<N, TL> : drop<N - 1, typename TL::tail> {};
+
+template<std::size_t N, class T>
+using replicate = take<N, repeat<T>>;
+
+template<template<class> class F, class T>
+struct iterate {
+    using head = T;
+    using tail = iterate<F, F<T>>;
+};
+
+namespace __detail {
+    template<type_list TL, type_list TOriginal>
+    struct cycle : nil {};
+    template<empty TL, type_sequence TOriginal>
+    struct cycle<TL, TOriginal> {
+        using head = TOriginal::head;
+        using tail = cycle<typename TOriginal::tail, TOriginal>;
+    };
+    template<type_sequence TL, type_sequence TOriginal>
+    struct cycle<TL, TOriginal> {
+        using head = TL::head;
+        using tail = cycle<typename TL::tail, TOriginal>;
+    };
+}
+template<type_list TL>
+using cycle = __detail::cycle<TL, TL>;
+
+template<template<class> class F, type_list TL>
+struct map : nil {};
+template<template<class> class F, type_sequence TL>
+struct map<F, TL> {
+    using head = F<typename TL::head>;
+    using tail = map<F, typename TL::tail>;
+};
 }

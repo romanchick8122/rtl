@@ -1,17 +1,20 @@
 #include <concepts>
+#include <cstddef>
 #include <type_list.hpp>
 #include <tuple>
 
 using namespace rtl::type_list;
+template<type_list TL>
+using to_std_tuple = to_tuple<std::tuple, TL>;
 static_assert(
     std::same_as
-    < to_tuple<std::tuple, cons<int, cons<bool, cons<float, nil>>>>
+    < to_std_tuple<cons<int, cons<bool, cons<float, nil>>>>
     , std::tuple<int, bool, float>
     >
 );
 static_assert(
     std::same_as
-    < to_tuple<std::tuple, from_pack<int, bool, float>>
+    < to_std_tuple<from_pack<int, bool, float>>
     , std::tuple<int, bool, float>
     >
 );
@@ -24,45 +27,104 @@ static_assert(
 );
 static_assert(
     std::same_as
-    < to_tuple<std::tuple, take<3, repeat<int>>>
+    < to_std_tuple<take<3, repeat<int>>>
     , std::tuple<int, int, int>
     >
 );
 static_assert(
     std::same_as
-    < to_tuple<std::tuple, take<2, from_tuple<std::tuple, std::tuple<int, bool, float>>>>
+    < to_std_tuple<take<2, from_tuple<std::tuple, std::tuple<int, bool, float>>>>
     , std::tuple<int, bool>
     >
 );
 static_assert(
     std::same_as
-    < to_tuple<std::tuple, take<0, from_pack<int, bool, float, double>>>
+    < to_std_tuple<take<0, from_pack<int, bool, float, double>>>
     , std::tuple<>
     >
 );
 static_assert(
     std::same_as
-    < to_tuple<std::tuple, take<10, from_pack<int, bool, float, double>>>
+    < to_std_tuple<take<10, from_pack<int, bool, float, double>>>
     , std::tuple<int, bool, float, double>
     >
 );
 static_assert(
     std::same_as
-    < to_tuple<std::tuple, drop<3, from_pack<float, int, float, int>>>
+    < to_std_tuple<drop<3, from_pack<float, int, float, int>>>
     , std::tuple<int>
     >
 );
 static_assert(
     std::same_as
-    < to_tuple<std::tuple, drop<0, from_pack<float, int, float, int>>>
+    < to_std_tuple<drop<0, from_pack<float, int, float, int>>>
     , std::tuple<float, int, float, int>
     >
 );
 static_assert(
     std::same_as
-    < to_tuple<std::tuple, drop<10, from_pack<float, int, float, int>>>
+    < to_std_tuple<drop<10, from_pack<float, int, float, int>>>
     , std::tuple<>
     >
 );
+static_assert(
+    std::same_as
+    < to_std_tuple<replicate<3, int>>
+    , std::tuple<int, int, int>
+    >
+);
+template <class T>
+using make_ptr = T*;
+static_assert(
+    std::same_as
+    < to_std_tuple<take<4, iterate<make_ptr, int>>>
+    , std::tuple<int, int*, int**, int***>
+    >
+);
+static_assert(
+    std::same_as
+    < to_std_tuple<take<5, cycle<from_pack<int, bool>>>>
+    , std::tuple<int, bool, int, bool, int>
+    >
+);
+static_assert(
+    std::same_as
+    < to_std_tuple<map<make_ptr, from_pack<int, bool, float>>>
+    , std::tuple<int*, bool*, float*>
+    >
+);
+template<std::size_t N>
+struct curry_take {
+    template<type_list TL>
+    using type = take<N, TL>;
+};
+static_assert(
+    std::same_as
+    < to_std_tuple
+      < map
+        < to_std_tuple
+        , take
+          < 3
+          , map
+            < curry_take<3>::template type
+            , repeat<repeat<float>>
+            >
+          >
+        >
+      >
+    , std::tuple
+      < std::tuple<float, float, float>
+      , std::tuple<float, float, float>
+      , std::tuple<float, float, float>
+      >
+    >
+);
+static_assert(
+    std::same_as
+    < to_std_tuple<map<make_ptr, nil>>
+    , std::tuple<>
+    >
+);
+static_assert(empty<cycle<nil>>);
 int main(int, char**) {
 }
