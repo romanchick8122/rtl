@@ -27,15 +27,21 @@ struct from_pack<TFirst, TRest...> {
     using tail = from_pack<TRest...>;
 };
 
-template<template<class...> class TTuple, class TT>
-struct from_tuple;
-template<template<class...> class TTuple, class... TData>
-struct from_tuple<TTuple, TTuple<TData...>> : from_pack<TData...> {};
+template<class TT>
+using from_tuple = decltype(
+    []<template<class...> class TTuple, class... TData>(
+        TTuple<TData...>
+    ) -> from_pack<TData...> {
+    }(std::declval<TT>())
+);
 
 template<class VT>
-using from_value_tuple = decltype([]<class T, template<class, T...> class VTuple, T... Data>(VTuple<T, Data...>){
-    return from_pack<value_tag<Data>...>{};
-}(std::declval<VT>()));
+using from_value_tuple = decltype(
+    []<class T, template<class, T...> class VTuple, T... Data>(
+        VTuple<T, Data...>
+    ) -> from_pack<value_tag<Data>...> {
+    }(std::declval<VT>())
+);
 
 namespace __detail {
     template<template <class...> class TTuple, type_list, class... TData>
@@ -44,7 +50,13 @@ namespace __detail {
     };
     template<template <class...> class TTuple, type_sequence TL, class... TData>
     struct to_tuple<TTuple, TL, TData...> {
-        using type = to_tuple<TTuple, typename TL::tail, TData..., typename TL::head>::type;
+        using type =
+            to_tuple
+            < TTuple
+            , typename TL::tail
+            , TData...
+            , typename TL::head
+            >::type;
     };
 }
 template<template <class...> class TTuple, type_list TL>

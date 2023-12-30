@@ -1,7 +1,5 @@
 #include "util.hpp"
-#include <concepts>
 #include <cstddef>
-#include <cstdint>
 #include <type_list.hpp>
 #include <tuple>
 #include <utility>
@@ -36,7 +34,7 @@ static_assert(
 );
 static_assert(
     std::same_as
-    < to_std_tuple<take<2, from_tuple<std::tuple, std::tuple<int, bool, float>>>>
+    < to_std_tuple<take<2, from_tuple<std::tuple<int, bool, float>>>>
     , std::tuple<int, bool>
     >
 );
