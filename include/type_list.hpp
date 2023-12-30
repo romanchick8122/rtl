@@ -164,4 +164,41 @@ struct scanl<OP, T, TL> {
     using head = T;
     using tail = scanl<OP, OP<T, typename TL::head>, typename TL::tail>;
 };
+
+namespace __detail {
+    template<template<class, class> class OP, class T, class TL>
+    struct foldl {
+        using type = T;
+    };
+    template<template<class, class> class OP, class T, type_sequence TL>
+    struct foldl<OP, T, TL> {
+        using type =
+            foldl
+            < OP
+            , OP<T, typename TL::head>
+            , typename TL::tail
+            >::type;
+    };
+}
+template<template<class, class> class OP, class T, class TL>
+using foldl = __detail::foldl<OP, T, TL>::type;
+
+namespace __detail {
+    template<template<class> class P, type_list TL>
+    struct filter_skip {
+        using type = filter_skip<P, typename TL::tail>::type;
+    };
+    template<template<class> class P, type_list TL>
+    requires (P<typename TL::head>::value)
+    struct filter_skip<P, TL> {
+        using type = TL;
+    };
+}
+template<template<class> class P, class TL>
+struct filter : nil {};
+template<template<class> class P, type_sequence TL>
+struct filter<P, TL> {
+    using head = __detail::filter_skip<P, TL>::type::head;
+    using tail = filter<P, typename __detail::filter_skip<P, TL>::type::tail>;
+};
 }

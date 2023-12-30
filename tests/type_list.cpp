@@ -1,7 +1,10 @@
 #include "util.hpp"
+#include <concepts>
 #include <cstddef>
+#include <cstdint>
 #include <type_list.hpp>
 #include <tuple>
+#include <type_traits>
 #include <utility>
 
 using namespace rtl::type_list;
@@ -231,6 +234,59 @@ static_assert(
       >
     , std::index_sequence<1, 1, 1, 2, 2, 4, 4, 8, 8>
     >
+);
+static_assert(
+    std::same_as
+    < foldl
+      < max_by_value
+      , rtl::value_tag<1>
+      , from_value_tuple<std::index_sequence<1, 1, 2, 1, 4, 2, 8, 4>>
+      >
+    , rtl::value_tag<std::size_t{8}>
+    >
+);
+static_assert(
+    std::same_as
+    < foldl
+      < max_by_value
+      , rtl::value_tag<1>
+      , nil
+      >
+    , rtl::value_tag<1>
+    >
+);
+template<class T>
+using small_type = std::integral_constant<bool, sizeof(T) <= 4>;
+static_assert(
+    std::same_as
+    < to_std_tuple
+      < filter
+        < small_type
+        , from_pack<std::int32_t, bool, std::uint64_t, std::int8_t, std::int64_t, std::int16_t>
+        >
+      >
+    , std::tuple<std::int32_t, bool, std::int8_t, std::int16_t>
+    >
+);
+static_assert(
+    std::same_as
+    < to_std_tuple<filter<small_type, nil>>
+    , std::tuple<>
+    >
+);
+static_assert(
+    std::same_as
+    < to_std_tuple
+      < take
+        < 5
+        , filter
+          < small_type
+          , cycle<from_pack<std::int32_t, bool, std::int64_t>>
+          >
+        >
+      >
+    , std::tuple<std::int32_t, bool, std::int32_t, bool, std::int32_t>
+    >  
 );
 int main(int, char**) {
 }
