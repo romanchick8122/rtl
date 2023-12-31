@@ -290,43 +290,25 @@ static_assert(
 );
 static_assert(
     std::same_as
-    < to_std_tuple
-      < map
-        < tuple_cast_to<std::tuple>::from
-        , take<10, zip<repeat<int>, repeat<float>>>
-        >
-      >
+    < to_std_tuple<take<10, zip<std::tuple, repeat<int>, repeat<float>>>>
       , to_std_tuple<take<10, repeat<std::tuple<int, float>>>>
     >
 );
 static_assert(
     std::same_as
-    < to_std_tuple
-      < map
-        < tuple_cast_to<std::tuple>::from
-        , take<10, zip<repeat<int>, repeat<float>, repeat<double>>>
-        >
-      >
-      , to_std_tuple<take<10, repeat<std::tuple<int, float, double>>>>
+    < to_std_tuple<take<10, zip<std::tuple, repeat<int>, repeat<float>, repeat<double>>>>
+    , to_std_tuple<take<10, repeat<std::tuple<int, float, double>>>>
     >
 );
 static_assert(
     std::same_as
-    < to_std_tuple<take<10, zip<from_pack<bool, char, int>, nil>>>
+    < to_std_tuple<take<10, zip<std::tuple, from_pack<bool, char, int>, nil>>>
     , std::tuple<>
     >
 );
 static_assert(
     std::same_as
-    < to_std_tuple
-      < take
-        < 10
-        , map
-          < tuple_cast_to<std::tuple>::from
-          , zip<from_pack<bool, char, int>, repeat<float>>
-          >
-        >
-      >
+    < to_std_tuple<take<10, zip<std::tuple, from_pack<bool, char, int>, repeat<float>>>>
     , std::tuple
       < std::tuple<bool, float>
       , std::tuple<char, float>

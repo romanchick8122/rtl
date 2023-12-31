@@ -221,23 +221,26 @@ namespace __detail {
         ) -> TupOuter<TInner..., TOuter>{
         }(std::declval<T>())
     );
-    template<class L, class R>
-    struct zip2 : nil {};
-    template<type_sequence L, type_sequence R>
-    struct zip2<L, R> {
-        using head = __detail::TTuple<typename L::head, typename R::head>;
-        using tail = zip2<typename L::tail, typename R::tail>;
+    template<template<class...> class TImpl>
+    struct zip_helpers {
+        template<class L, class R>
+        struct zip2 : nil {};
+        template<type_sequence L, type_sequence R>
+        struct zip2<L, R> {
+            using head = TImpl<typename L::head, typename R::head>;
+            using tail = zip2<typename L::tail, typename R::tail>;
+        };
+        template<class L, class R>
+        using zip_fold_expr = map<flattenl, zip2<L, R>>;
+        template<typename T>
+        using TTupleSingle = TImpl<T>;
     };
-    template<class L, class R>
-    using zip_fold_expr = map<flattenl, zip2<L, R>>;
-    template<typename T>
-    using TTupleSingle = TTuple<T>;
 }
-template<class TFirst, class... TRest>
+template<template<class...> class TImpl, class TFirst, class... TRest>
 using zip =
 foldl
-< __detail::zip_fold_expr
-, map<__detail::TTupleSingle, TFirst>
+< __detail::zip_helpers<TImpl>::template zip_fold_expr
+, map<__detail::zip_helpers<TImpl>::template TTupleSingle, TFirst>
 , from_pack<TRest...>
 >;
 }
