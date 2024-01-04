@@ -57,7 +57,7 @@ namespace __detail {
     template<template <class...> class TTuple, type_sequence TL, class... TData>
     struct to_tuple<TTuple, TL, TData...> {
         using type =
-            to_tuple
+            typename to_tuple
             < TTuple
             , typename TL::tail
             , TData...
@@ -66,7 +66,7 @@ namespace __detail {
     };
 }
 template<template <class...> class TTuple, type_list TL>
-using to_tuple = __detail::to_tuple<TTuple, TL>::type;
+using to_tuple = typename __detail::to_tuple<TTuple, TL>::type;
 
 namespace __detail {
     template<class...>
@@ -91,7 +91,7 @@ struct take : nil {};
 template<std::size_t N, type_sequence TL>
 requires (N > 0)
 struct take<N, TL> {
-    using head = TL::head;
+    using head = typename TL::head;
     using tail = take<N - 1, typename TL::tail>;
 };
 
@@ -116,12 +116,12 @@ namespace __detail {
     struct cycle : nil {};
     template<empty TL, type_sequence TOriginal>
     struct cycle<TL, TOriginal> {
-        using head = TOriginal::head;
+        using head = typename TOriginal::head;
         using tail = cycle<typename TOriginal::tail, TOriginal>;
     };
     template<type_sequence TL, type_sequence TOriginal>
     struct cycle<TL, TOriginal> {
-        using head = TL::head;
+        using head = typename TL::head;
         using tail = cycle<typename TL::tail, TOriginal>;
     };
 }
@@ -179,7 +179,7 @@ namespace __detail {
     template<template<class, class> class OP, class T, type_sequence TL>
     struct foldl<OP, T, TL> {
         using type =
-            foldl
+            typename foldl
             < OP
             , OP<T, typename TL::head>
             , typename TL::tail
@@ -187,12 +187,12 @@ namespace __detail {
     };
 }
 template<template<class, class> class OP, class T, class TL>
-using foldl = __detail::foldl<OP, T, TL>::type;
+using foldl = typename __detail::foldl<OP, T, TL>::type;
 
 namespace __detail {
     template<template<class> class P, type_list TL>
     struct filter_skip {
-        using type = filter_skip<P, typename TL::tail>::type;
+        using type = typename filter_skip<P, typename TL::tail>::type;
     };
     template<template<class> class P, type_list TL>
     requires (P<typename TL::head>::value)
@@ -204,7 +204,7 @@ template<template<class> class P, class TL>
 struct filter : nil {};
 template<template<class> class P, type_sequence TL>
 struct filter<P, TL> {
-    using head = __detail::filter_skip<P, TL>::type::head;
+    using head = typename __detail::filter_skip<P, TL>::type::head;
     using tail = filter<P, typename __detail::filter_skip<P, TL>::type::tail>;
 };
 
