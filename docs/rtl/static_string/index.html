@@ -1,0 +1,36 @@
+---
+layout: doc-member
+title: "static_string"
+
+doc-member:
+  type: "template"
+  name: "static_string"
+  at: "::rtl"
+  full-name: "::rtl::static_string"
+  header: "static_string.hpp"
+  brief: "Template to work with strings in compile-time and use them in non-type template arguments."
+  description: "
+<p>
+    This template is intended to create tags in compile time from string literals (and more). It can be used as non-type template parameter, and even as placeholder template parameter for deduced class type.
+</p>
+<p>
+    Practically this allows using string literals as non-type template parameters, simplifying boilerplate to access compile-time name storages.
+</p>"
+  signature: "<extent>"
+  definition: "
+template<std::size_t extent>\n
+struct static_string {};"
+---
+<div class="container">
+<h3>Examples</h3>
+{% highlight cpp linenos %}
+#include <static_string>
+template<rtl::static_string>
+struct name {};
+
+using a = name<"James">;
+using b = name<"John">;
+// a and b name different types.
+{% endhighlight %}
+</div>
+<hr/>
