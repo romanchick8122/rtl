@@ -11,13 +11,17 @@ layout: default
     {% endif %}
 </h1>
 
+{% if page.doc-member.header %}
+<small>Defined in header <code>&lt;{{ page.doc-member.header }}&gt;</code></small>
+{% endif %}
+
+<hr/>
+
 {% if page.doc-member.definition %}
 <div class="container">
     <h3>Definition</h3>
     <div class="rounded">
-    {% highlight cpp %}
-    {{ page.doc-member.definition }}
-    {% endhighlight %}
+    {% highlight cpp %}{{ page.doc-member.definition }}{% endhighlight %}
     </div>
 </div>
 <hr/>
