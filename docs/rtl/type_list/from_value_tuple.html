@@ -1,0 +1,41 @@
+---
+layout: doc-member
+title: "type_list::from_value_tuple"
+
+doc-member:
+  type: "template"
+  name: "from_value_tuple"
+  at: "::rtl::type_list"
+  full-name: "::rtl::type_list::from_value_tuple"
+  header: "type_list.hpp"
+  brief: "Creates type list from value type tuple."
+  signature: "<VT>"
+  definition: "
+template<class VT>\n
+struct from_value_tuple {};
+"
+  see-also:
+    - "::rtl::type_list::to_value_tuple"
+    - "::rtl::type_list::from_tuple"
+    - "::rtl::value_tag"
+---
+<div class="container">
+<h3>Notes</h3>
+It accepts any type VT that is an instantiation of a variadic template with non-type template parametrs. The result would consist of {% include doc-link.html full-name="::rtl::value_tag" %} types with values representing tuple parameters.
+</div>
+<hr/>
+<div class="container">
+<h3>Examples</h3>
+{% highlight cpp linenos %}
+#include <type_list.hpp>
+#include <concepts>
+#include <tuple>
+
+using rtl::type_list::from_value_tuple;
+using rtl::type_list::to_value_tuple;
+using b = std::make_index_sequence<5>;
+using a = from_value_tuple<b>;
+static_assert(std::same_as<to_value_tuple<std::index_sequence, a>, b>);
+{% endhighlight %}
+</div>
+<hr/>

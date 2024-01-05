@@ -1,0 +1,32 @@
+---
+layout: doc-member
+title: "type_list::to_tuple"
+
+doc-member:
+  type: "using"
+  name: "to_tuple"
+  at: "::rtl::type_list"
+  full-name: "::rtl::type_list::to_tuple"
+  header: "type_list.hpp"
+  brief: "Converts finite type list to tuple of given type."
+  signature: "<TTuple, TL>"
+  definition: "
+template<template<class...> class TTuple, type_list TL>\n
+using to_tuple = TTuple</*TL...*/>;
+"
+---
+<div class="container">
+<h3>Examples</h3>
+<p>Despite its name, it actually just passes list contents to metafunction, thus allowing more complex use cases: </p>
+{% highlight cpp linenos %}
+#include <concepts>
+#include <tuple>
+
+template<class... Ts>
+using get2 = decltype(std::get<2>(std::declval<std::tuple<Ts...>>()));
+
+using a = rtl::type_list::from_pack<int, bool, float, double>;
+static_assert(std::same_as<float&&, rtl::type_list::to_tuple<get2, a>>);
+{% endhighlight %}
+</div>
+<hr/>
