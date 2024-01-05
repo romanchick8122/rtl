@@ -1,0 +1,60 @@
+---
+layout: default
+---
+
+{% assign parent-page = site.pages | where_exp: "item", "item.doc-member.full-name == page.doc-member.at" | first %}
+<h1>{{ page.doc-member.type }}
+    {% if parent-page %}
+    <a href="{{ parent-page.url | relative_url }}">{{ page.doc-member.at }}</a><a>::{{ page.doc-member.name }}</a>
+    {% else %}
+    <a>{{ page.doc-member.full-name }}</a>
+    {% endif %}
+</h1>
+
+{% if page.doc-member.definition %}
+<div class="container">
+    <h3>Definition</h3>
+    <div class="rounded">
+    {% highlight cpp %}
+    {{ page.doc-member.definition }}
+    {% endhighlight %}
+    </div>
+</div>
+<hr/>
+{% endif %}
+
+<div class="container">
+    <h3>Description</h3>
+    {% if page.doc-member.description %}
+    {{ page.doc-member.description }}
+    {% else %}
+    <p>{{ page.doc-member.brief }}</p>
+    {% endif %}
+    <hr/>
+</div>
+
+{% if page.name == "index.html" or page.name == "index.md" %}
+    {% assign subpages = site.pages | where_exp: "item", "item.doc-member.at == page.doc-member.full-name" %}
+{% else %}
+    {% assign subpages = "" | split: "" %}
+{% endif %}
+{% assign member-categories = subpages | map: "doc-member" | map: "type" | uniq | sort %}
+{% for member-category in member-categories %}
+    <div class="container">
+        <h3>Member {{ member-category }}s</h3>
+        {% assign category-pages = subpages | where_exp: "item", "item.doc-member.type==member-category" %}
+        <div class="list-group">
+        {% for subpage in category-pages %}
+        <a href="{{ subpage.url | relative_url }}" class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+                <h5>{{ subpage.doc-member.name }}</h5>
+                <small class="text-secondary">{{ subpage.doc-member.signature | escape }}</small>
+            </div>
+            <p class="mb-1">{{ subpage.doc-member.brief }}</p>
+        </a>
+        {% endfor %}
+        </div>
+    </div>
+    <hr/>
+{% endfor %}
+{{ content }}
