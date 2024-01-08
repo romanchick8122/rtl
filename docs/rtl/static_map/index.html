@@ -1,0 +1,34 @@
+---
+layout: doc-member
+title: "static_map"
+
+doc-member:
+  type: "template"
+  name: "static_map"
+  at: "::rtl"
+  full-name: "::rtl::static_map"
+  header: "static_map.hpp"
+  brief: "Type to create mappings between types."
+  signature: "<TData...>"
+  definition: "
+template<key_value_pair... TData>
+struct static_map {};
+"
+---
+<div class="container">
+<h3>Notes</h3>
+All TData members must have unique keys.
+</div>
+<hr/>
+<div class="container">
+<h3>Examples</h3>
+{% highlight cpp linenos %}
+#include <static_map.hpp>
+
+#include <concepts>
+using sample_map = rtl::static_map<rtl::make_key_value_pair<int, float>, rtl::make_key_value_pair<float, int>>;
+static_assert(std::same_as<sample_map::at<int>, float>);
+static_assert(std::same_as<sample_map::at<float>, int>);
+{% endhighlight %}
+</div>
+<hr/>
