@@ -1,0 +1,17 @@
+---
+layout: doc-member
+title: "type_list::iterate"
+
+doc-member:
+  type: "template"
+  name: "iterate"
+  at: "::rtl::type_list"
+  full-name: "::rtl::type_list::iterate"
+  brief: "Infinite list of T, F&lt;T&gt;, F&lt;F&lt;T&gt;&gt;, ..."
+  header: "type_list.hpp"
+  signature: <F, T>
+  definition: "
+template<template<class> class F, class T>\n
+struct iterate{};
+"
+---

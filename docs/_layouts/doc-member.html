@@ -62,3 +62,15 @@ layout: default
     <hr/>
 {% endfor %}
 {{ content }}
+
+{% if page.doc-member.see-also %}
+<div class="container">
+<h3>See also</h3>
+<div class="list-group">
+{% for reference in page.doc-member.see-also %}
+{% include doc-link.html full-name=reference mixins="class='list-group-item list-group-item-action flex-column align-items-start'" %}
+{% endfor %}
+</div>
+</div>
+<hr/>
+{% endif %}

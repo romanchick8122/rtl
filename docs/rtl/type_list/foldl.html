@@ -1,0 +1,38 @@
+---
+layout: doc-member
+title: "type_list::foldl"
+
+doc-member:
+  type: "template"
+  name: "foldl"
+  at: "::rtl::type_list"
+  full-name: "::rtl::type_list::foldl"
+  header: "type_list.hpp"
+  brief: "Performs a left fold with given operation."
+  signature: "<OP, T, TL>"
+  definition: "
+template<template<class, class> class OP, class T, class TL>\n
+struct foldl {};
+"
+  see-also:
+  - "::rtl::type_list::from_value_tuple"
+  - "::rtl::type_list::to_value_tuple"
+---
+<div class="container">
+<h3>Examples</h3>
+{% highlight cpp linenos %}
+#include <type_list.hpp>
+#include <concepts>
+#include <utility>
+
+template<class A, class B>
+using sum = rtl::value_tag<A::value + B::value>;
+
+using rtl::type_list::from_value_tuple;
+using rtl::type_list::to_value_tuple;
+using rtl::type_list::foldl;
+using a = foldl<sum, rtl::value_tag<0>, from_value_tuple<std::index_sequence<1, 2, 5, 6>>>;
+static_assert(a::value == 0 + 1 + 2 + 5 + 6);
+{% endhighlight %}
+</div>
+<hr/>

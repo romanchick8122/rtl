@@ -1,0 +1,45 @@
+---
+layout: doc-member
+title: "type_list::scanl"
+
+doc-member:
+  type: "template"
+  name: "scanl"
+  at: "::rtl::type_list"
+  full-name: "::rtl::type_list::scanl"
+  header: "type_list.hpp"
+  brief: "Performs a left scan with given operation."
+  signature: "<OP, T, TL>"
+  definition: "
+template<template<class, class> class OP, class T, class TL>\n
+struct scanl {};
+"
+  see-also:
+  - "::rtl::type_list::from_value_tuple"
+  - "::rtl::type_list::to_value_tuple"
+---
+<div class="container">
+<h3>Notes</h3>
+Template parameter T is the type that would be added to the beginning of the list for scan operation.
+</div>
+<hr/>
+<div class="container">
+<h3>Examples</h3>
+{% highlight cpp linenos %}
+#include <type_list.hpp>
+#include <concepts>
+#include <utility>
+
+template<class A, class B>
+using sum = rtl::value_tag<A::value + B::value>;
+
+using rtl::type_list::from_value_tuple;
+using rtl::type_list::to_value_tuple;
+using rtl::type_list::scanl;
+using a = scanl<sum, rtl::value_tag<0>, from_value_tuple<std::index_sequence<1, 2, 5, 6>>>;
+using b = std::index_sequence<0, 0 + 1, 0 + 1 + 2, 0 + 1 + 2 + 5, 0 + 1 + 2 + 5 + 6>;
+static_assert(std::same_as<to_value_tuple<std::index_sequence, a>, b>);
+{% endhighlight %}
+</div>
+<hr/>
+  

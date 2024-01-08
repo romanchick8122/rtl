@@ -1,0 +1,30 @@
+---
+layout: doc-member
+title: "type_list::replicate"
+
+doc-member:
+  type: "template"
+  name: "replicate"
+  at: "::rtl::type_list"
+  full-name: "::rtl::type_list::replicate"
+  header: "type_list.hpp"
+  brief: "Creates infinte type_list that replicates T times N."
+  signature: "<N, T>"
+  definition: "
+template<std::size_t N, class T>\n
+struct replicate {};  
+"
+  see-also:
+  - "::rtl::type_list::to_tuple"
+  - "::rtl::type_list::take"
+  - "::rtl::type_list::repeat"
+---
+<div class="container">
+<h3>Notes</h3>
+Its definition is effectively the same as
+{% highlight cpp linenos %}
+template<std::size_t N, class T>
+using replicate = take<N, repeat<T>>;
+{% endhighlight %}
+</div>
+<hr/>

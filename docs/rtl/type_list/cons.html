@@ -1,0 +1,22 @@
+---
+layout: doc-member
+title: "type_list::cons"
+
+doc-member:
+  type: "template"
+  name: "cons"
+  at: "::rtl::type_list"
+  full-name: "::rtl::type_list::cons"
+  header: "type_list.hpp"
+  brief: "Adds element to the beginning of the list."
+  description: "
+<p>
+    Creates type list acquired by adding THead to the beginning of the list TTail.
+</p>
+"
+  signature: "<THead, TTail>"
+  definition: "
+template<class THead, type_list TTail>\n
+struct cons {};
+"
+---

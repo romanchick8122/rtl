@@ -1,0 +1,39 @@
+---
+layout: doc-member
+title: "type_list::from_tuple"
+
+doc-member:
+  type: "template"
+  name: "from_tuple"
+  at: "::rtl::type_list"
+  full-name: "::rtl::type_list::from_tuple"
+  header: "type_list.hpp"
+  brief: "Creates type list from type tuple."
+  signature: "<TT>"
+  definition: "
+template<class TT>\n
+struct from_tuple {};
+"
+  see-also:
+  - "::rtl::type_list::to_tuple"
+---
+<div class="container">
+<h3>Notes</h3>
+It accepts any type TT that is an instantiation of a variadic template.
+</div>
+<hr/>
+<div class="container">
+<h3>Examples</h3>
+{% highlight cpp linenos %}
+#include <type_list.hpp>
+#include <concepts>
+#include <tuple>
+
+using rtl::type_list::from_tuple;
+using rtl::type_list::to_tuple;
+using b = std::tuple<int, bool, float>;
+using a = from_tuple<b>;
+static_assert(std::same_as<to_tuple<std::tuple, a>, b>);
+{% endhighlight %}
+</div>
+<hr/>

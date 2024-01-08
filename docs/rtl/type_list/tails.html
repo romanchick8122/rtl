@@ -1,0 +1,40 @@
+---
+layout: doc-member
+title: "type_list::tails"
+
+doc-member:
+  type: "template"
+  name: "tails"
+  at: "::rtl::type_list"
+  full-name: "::rtl::type_list::tails"
+  brief: "Creates a list of all tails of parameter list, ordered by length decreasing."
+  header: "type_list.hpp"
+  signature: "<TL>"
+  definition: "
+template<type_list TL>
+struct tails {};
+"
+  see-also:
+  - "::rtl::type_list::inits"
+---
+<div class="container">
+<h3>Examples</h3>
+{% highlight cpp linenos %}
+#include <type_list.hpp>
+#include <concepts>
+#include <tuple>
+using rtl::type_list::tails;
+using rtl::type_list::from_pack;
+using rtl::type_list::map;
+using rtl::type_list::to_tuple;
+
+template<rtl::type_list::type_list TL>
+using to_std_tuple = to_tuple<std::tuple, TL>;
+
+using a = map<to_std_tuple, tails<from_pack<int, bool, float>>>;
+using b = std::tuple<std::tuple<int, bool, float>, std::tuple<bool, float>, std::tuple<float>, std::tuple<>>;
+
+static_assert(std::same_as<to_std_tuple<a>, b>);
+{% endhighlight %}
+</div>
+<hr/>
