@@ -1,0 +1,22 @@
+---
+layout: doc-member
+title: "key_value_pair"
+
+doc-member:
+  type: "concept"
+  name: "key_value_pair"
+  at: "::rtl"
+  full-name: "::rtl::key_value_pair"
+  header: "static_map.hpp"
+  brief: "Checks if type names a key value pair (usable, for example, for maps)."
+  signature: "<T>"
+  definition: "
+template<typename T>\n
+concept key_value_pair = requires {\n
+\ \ typename T::key;\n
+\ \ typename T::value;\n
+};
+"
+  see-also:
+  - "::rtl::static_map"
+---
