@@ -1,0 +1,41 @@
+---
+layout: doc-member
+title: "type_list::take"
+
+doc-member:
+  type: "template"
+  name: "take"
+  at: "::rtl::type_list"
+  full-name: "::rtl::type_list::take"
+  header: "type_list.hpp"
+  brief: "Takes at most N elements from type_list TL."
+  signature: "<N, TL>"
+  definition: "
+template<std::size_t N, type_list TL>\n
+struct take {};
+"
+  see-also:
+  - "::rtl::type_list::to_tuple"
+  - "::rtl::type_list::from_pack"
+  - "::rtl::type_list::drop"
+---
+<div class="container">
+<h3>Examples</h3>
+{% highlight cpp linenos %}
+#include <concepts>
+#include <tuple>
+
+using rtl::type_list::to_tuple;
+using rtl::type_list::from_pack;
+using rtl::type_list::take;
+using original = from_pack<int, bool, float>;
+using first0 = take<0, original>;
+using first2 = take<2, original>;
+using first4 = take<4, original>;
+static_assert(std::same_as<to_tuple<std::tuple, first0>, std::tuple<>>);
+static_assert(std::same_as<to_tuple<std::tuple, first2>, std::tuple<int, bool>>);
+/* takes all elements if there are less then N total elements in type list. */
+static_assert(std::same_as<to_tuple<std::tuple, first4>, std::tuple<int, bool, float>>);
+{% endhighlight %}
+</div>
+<hr/>

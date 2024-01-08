@@ -1,0 +1,45 @@
+---
+layout: doc-member
+title: "type_list::zip"
+
+doc-member:
+  type: "template"
+  name: "zip"
+  at: "::rtl::type_list"
+  full-name: "::rtl::type_list::zip"
+  header: "type_list.hpp"
+  brief: "Zips argument type lists."
+  signature: "<TImpl, TL...>"
+  definition: "
+template<template<class...> class TImpl, class class... TL>\n
+struct zip;
+"
+---
+<div class="container">
+<h3>Notes</h3>
+TImpl is the tuple type that would be used to store elements of the zipped sequence.
+</div>
+<hr/>
+<div class="container">
+<h3>Examples</h3>
+{% highlight cpp linenos %}
+#include <type_list.hpp>
+#include <concepts>
+#include <tuple>
+
+using rtl::type_list::from_pack;
+using rtl::type_list::to_tuple;
+using rtl::type_list::zip;
+
+using a = from_pack<int, bool, float>;
+using b = from_pack<long long, char, double>;
+using c = to_tuple<std::tuple, zip<std::tuple, a, b>>;
+using d = std::tuple
+< std::tuple<int, long long>
+, std::tuple<bool, char>
+, std::tuple<float, double>
+>;
+static_assert(std::same_as<c, d>);
+{% endhighlight %}
+</div>
+<hr/>

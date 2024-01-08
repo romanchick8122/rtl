@@ -1,0 +1,36 @@
+---
+layout: doc-member
+title: "type_list::repeat"
+
+doc-member:
+  type: "template"
+  name: "repeat"
+  at: "::rtl::type_list"
+  full-name: "::rtl::type_list::repeat"
+  header: "type_list.hpp"
+  brief: "Creates infinte type_list that repeats T forever."
+  signature: "<T>"
+  definition: "
+template<class T>\n
+struct repeat {};  
+"
+  see-also:
+  - "::rtl::type_list::to_tuple"
+  - "::rtl::type_list::take"
+---
+<div class="container">
+<h3>Examples</h3>
+{% highlight cpp linenos %}
+#include <type_list.hpp>
+#include <concepts>
+#include <tuple>
+
+using rtl::type_list::to_tuple;
+using rtl::type_list::repeat;
+using rtl::type_list::take;
+using a = take<4, repeat<int>>;
+using b = std::tuple<int, int, int, int>;
+static_assert(std::same_as<to_tuple<std::tuple, a>, b>);
+{% endhighlight %}
+</div>
+<hr/>
