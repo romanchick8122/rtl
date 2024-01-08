@@ -1,0 +1,38 @@
+---
+layout: doc-member
+title: "type_list::cycle"
+
+doc-member:
+  type: "template"
+  name: "cycle"
+  at: "::rtl::type_list"
+  full-name: "::rtl::type_list::cycle"
+  brief: "Infinite list that repeats its argument type list."
+  signature: "<TL>"
+  definition: "
+template<type_list TL>
+struct cycle {};
+"
+  see-also:
+  - "::rtl::type_list::to_tuple"
+  - "::rtl::type_list::take"
+---
+<div class="container">
+<h3>Examples</h3>
+{% highlight cpp linenos %}
+#include <type_list.hpp>
+
+#include<concepts>
+#include<tuple>
+using rtl::type_list::take;
+using rtl::type_list::cycle;
+using rtl::type_list::to_tuple;
+static_assert(
+    std::same_as
+    < to_tuple<std::tuple, take<5, cycle<from_pack<int, bool>>>>
+    , std::tuple<int, bool, int, bool, int>
+    >
+);
+{% endhighlight %}
+</div>
+<hr/>

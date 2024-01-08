@@ -1,0 +1,41 @@
+---
+layout: doc-member
+title: "type_list::drop"
+
+doc-member:
+  type: "template"
+  name: "drop"
+  at: "::rtl::type_list"
+  full-name: "::rtl::type_list::drop"
+  header: "type_list.hpp"
+  brief: "Drops at most N elements from type_list TL."
+  signature: "<N, TL>"
+  definition: "
+template<std::size_t N, type_list TL>\n
+struct drop {};
+"
+  see-also:
+  - "::rtl::type_list::to_tuple"
+  - "::rtl::type_list::from_pack"
+  - "::rtl::type_list::take"
+---
+<div class="container">
+<h3>Examples</h3>
+{% highlight cpp linenos %}
+#include <concepts>
+#include <tuple>
+
+using rtl::type_list::to_tuple;
+using rtl::type_list::from_pack;
+using rtl::type_list::drop;
+using original = from_pack<int, bool, float>;
+using drop0 = drop<0, original>;
+using drop2 = drop<2, original>;
+using drop4 = drop<4, original>;
+static_assert(std::same_as<to_tuple<std::tuple, drop0>, std::tuple<int, bool, float>>);
+static_assert(std::same_as<to_tuple<std::tuple, drop2>, std::tuple<float>>);
+/* If there are not enough elements, list is empty. */
+static_assert(std::same_as<to_tuple<std::tuple, drop4>, std::tuple<>>);
+{% endhighlight %}
+</div>
+<hr/>

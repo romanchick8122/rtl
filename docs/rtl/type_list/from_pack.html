@@ -1,0 +1,34 @@
+---
+layout: doc-member
+title: "type_list::from_pack"
+
+doc-member:
+  type: "template"
+  name: "from_pack"
+  at: "::rtl::type_list"
+  full-name: "::rtl::type_list::from_pack"
+  header: "type_list.hpp"
+  brief: "Creates type list from parameter pack."
+  signature: "<Ts...>"
+  definition: "
+template<class... Ts>\n
+struct from_pack {};
+"
+  see-also:
+    - "::rtl::type_list::to_tuple"
+---
+<div class="container">
+<h3>Examples</h3>
+{% highlight cpp linenos %}
+#include <type_list.hpp>
+#include <concepts>
+#include <tuple>
+
+using rtl::type_list::from_pack;
+using rtl::type_list::to_tuple;
+using a = from_pack<int, bool, float>;
+using b = std::tuple<int, bool, float>;
+static_assert(std::same_as<to_tuple<std::tuple, a>, b>);
+{% endhighlight %}
+</div>
+<hr/>

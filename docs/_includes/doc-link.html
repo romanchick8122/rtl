@@ -1,0 +1,2 @@
+{% assign link_page = site.pages | where_exp: "item", "item.doc-member.full-name == include.full-name" | first %}
+<a href="{{ link_page.url | relative_url }}" {{ include.mixins }}>{% if include.content %}{{ include.content }}{% else %}{{ link_page.title }}{% endif%}</a>

@@ -1,0 +1,27 @@
+---
+layout: doc-member
+title: "type_list::type_list"
+
+doc-member:
+  type: "concept"
+  name: "type_list"
+  at: "::rtl::type_list"
+  full-name: "::rtl::type_list::type_list"
+  header: "type_list.hpp"
+  brief: "Checks if type TL is a type list."
+  signature: "TL"
+  definition: "
+template<class TL>\n
+concept type_list;
+"
+---
+<div class="container">
+<h3>Notes</h3>
+<p>
+    Type is considered a type list if it is either derived from {% include doc-link.html full-name="::rtl::type_list::nil" %}, is which case it represents an empty list, or has member types named <code>head</code> and <code>tail</code>, representing first list item and list that can be acquired by removing first element from the original list respectively.
+</p>
+<p>
+    Checking that <code>tail</code> actually is a type list is ommited, because if it would not be, compiler would have to decide an undecisable problem. It is up to the user to loose their mind with crazy compiler errors if they use improper type list at any point (:
+</p>
+</div>
+<hr/>

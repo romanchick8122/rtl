@@ -1,0 +1,20 @@
+---
+layout: doc-member
+title: "type_list::to_value_tuple"
+
+doc-member:
+  type: "using"
+  name: "to_value_tuple"
+  at: "::rtl::type_list"
+  full-name: "::rtl::type_list::to_value_tuple"
+  header: "type_list.hpp"
+  brief: "Converts finite type list to value tuple of given type."
+  signature: "<VTuple, TL>"
+  definition: "
+template<template<auto...> class VTuple, type_list TL>\n
+using to_value_tuple = VTuple</*TL::value...*/>;
+"
+  see-also:
+    - "::rtl::type_list::from_value_tuple"
+    - "::rtl::type_list::to_tuple"
+---
