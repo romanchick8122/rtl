@@ -1,0 +1,39 @@
+---
+layout: doc-member
+title: "layout_struct"
+
+doc-member:
+  type: "template"
+  name: "layout_struct"
+  at: "::rtl"
+  full-name: "::rtl::layout_struct"
+  brief: "Storage type implementing custom layout policy."
+  signature: "<TLayout, TFields...>"
+  definition: "
+template<class TLayout, is_field... TFields>\n
+struct layout_struct {};
+"
+  see-also:
+  - "::rtl::struct_layouts"
+---
+<div class="container">
+<h3>Motivation</h3>
+<p>There are occasions, when default struct layout is inefficient, unreadable or too clunky too use. For example:</p>
+{% highlight cpp linenos %}
+struct A {
+    char x;
+    int y;
+    char z;
+};
+struct B {
+    char x;
+    char z;
+    int y;
+};
+{% endhighlight %}
+<p>It is a standard requirement that members are aligned and appear in the same order, as they are defined. On most platforms int is aligned to 4 byte boundary, and <code>sizeof(A)</code> is 12, while <code>sizeof(B)</code> is only 8. (In older C++ standards it was allowed to reorder members with different access modifiers, but most compilers never used the opportunity, and there were more and more restrictions added. As of C++23 compiers are not allowed to reorder members at all anymore.)</p>
+<p>This behaviour is reasonable, when interopability with C language is required (as it imposes the same requirements). However, if the type is only used within C++ ecosystem, it results in bigger structures, and, as a result of this, more cache misses and worse performance in general. One can still manually optimize the layout of their structs with reordering, but this creates less readable code (some fields are logically grouped together, but must appear in different parts of the struct definition).</p>
+<p>Even for interopability reasons it was not always possible to use C++ structs. Sometimes data comes from interfaces with no alignment requirement. Developers could either use compiler specific layout pragmas (like <code>#pragma pack</code>), or abuse undefined behaviour being actually very predicatable (but only when you are looking at it) and reinterpret_cast breaking strict aliasing rule all over the place.</p>
+<p>This type allows applying pre-defined or custom layout policies to struct definitions, like packing, or reordering to reduce padding, but does so in a way that is valid in C++ standard, making it compiler independent. As it is intended not only for interopability, but also for performance, it is implemented in a way, that is as fast as regular structure definition whenever it is possible.</p>
+</div>
+<hr/>

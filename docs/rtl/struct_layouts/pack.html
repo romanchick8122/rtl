@@ -1,0 +1,24 @@
+---
+layout: doc-member
+title: "struct_layouts::pack"
+
+doc-member:
+  type: "template"
+  name: "pack"
+  at: "::rtl::struct_layouts"
+  full-name: "::rtl::struct_layouts::pack"
+  header: "layout_struct.hpp"
+  brief: "Implements a layout policy that packs members with reduced aligned requirement."
+  signature: "Alignment"
+  definition: "
+template<std::size_t Alignment>\n
+struct pack {};
+"
+  see-also:
+  - "::rtl::layout_struct"
+---
+<div class="container">
+<h3>Notes</h3>
+This policy mimics the behaviour of non-standard, but very popular <code>#pragma pack</code>.
+</div>
+<hr/>
