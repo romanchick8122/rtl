@@ -1,0 +1,22 @@
+---
+layout: doc-member
+title: "layout_struct::v"
+
+doc-member:
+  type: "function template"
+  name: "v"
+  at: "::rtl::layout_struct"
+  full-name: "::rtl::layout_struct::v"
+  brief: "Accesses value of the field."
+  signature: "<Name>"
+  definition: "
+template<rtl::static_string Name>\n
+/*unspecified*/ v();
+"
+---
+<div class="container">
+<h3>Notes</h3>
+<p>The return type of this function is unspecified, but it is implicitly convertible to the type of the field and is assignable from the type of the field.</p>
+<p>The behaviour of the program that uses this function's return value after the original object exited its lifetime is undefined.</p>
+</div>
+<hr/>
